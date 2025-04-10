@@ -4,25 +4,28 @@ import { es, en } from 'vuetify/locale'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
 
+// 👇 Importación correcta de los iconos
+import '@mdi/font/css/materialdesignicons.css'
+import { aliases, mdi } from 'vuetify/iconsets/mdi'
+
 const vuetify = createVuetify({
-    components,
-    directives,
-    locale: {
-      locale: 'es',
-      fallback: 'en',
-      messages: {
-        es,
-        en,
-      },
+  components,
+  directives,
+  locale: {
+    locale: 'es',
+    fallback: 'en',
+    messages: {
+      es,
+      en,
     },
-    icons: {
-      defaultSet: 'mdi',
-      sets: {
-        mdi: {
-          component: 'mdi', //borrame probar si este sobra
-        },
-      },
+  },
+  icons: {
+    defaultSet: 'mdi',
+    aliases,
+    sets: {
+      mdi, 
     },
+  },
 })
 
 export default vuetify
