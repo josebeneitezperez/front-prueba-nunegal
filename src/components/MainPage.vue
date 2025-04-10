@@ -1,4 +1,5 @@
 <template>
+  <span>hola mundo</span>
     <v-row align="center" justify="center">
       <v-col cols="auto">
         <v-btn
