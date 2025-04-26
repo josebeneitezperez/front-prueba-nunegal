@@ -1,4 +1,4 @@
-import { apiService } from "@/apiService";
+import { apiService } from "@/services/apiService";
 
 export function getListProduct() {
   return apiService.get("/api/product");

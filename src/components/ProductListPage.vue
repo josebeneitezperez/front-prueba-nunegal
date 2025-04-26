@@ -20,34 +20,24 @@
 </template>
 
 <script setup>
+import { ref, onMounted } from "vue";
 import Product from "@/components/Product.vue";
-import { ref } from "vue";
+import * as productService from "@/services/productService";
 
-const listProduct = ref([
-  { id: 1, name: "iPhone 14 Pro" },
-  { id: 2, name: "Samsung Galaxy S23" },
-  { id: 3, name: "Google Pixel 8" },
-  { id: 4, name: "OnePlus 11" },
-  { id: 5, name: "Xiaomi 13 Pro" },
-  { id: 6, name: "Sony Xperia 1 V" },
-  { id: 7, name: "Huawei P60 Pro" },
-  { id: 8, name: "Motorola Edge 40" },
-  { id: 9, name: "Realme GT Neo 5" },
-  { id: 10, name: "Asus ROG Phone 7" },
-  { id: 11, name: "Nokia XR21" },
-  { id: 12, name: "Oppo Find X6" },
-  { id: 13, name: "Vivo X90 Pro" },
-  { id: 14, name: "Honor Magic5 Pro" },
-  { id: 15, name: "iPhone SE 2022" },
-  { id: 16, name: "Samsung Galaxy Z Fold 5" },
-  { id: 17, name: "Pixel Fold" },
-  { id: 18, name: "OnePlus Nord 3" },
-  { id: 19, name: "Redmi Note 12" },
-  { id: 20, name: "Sony Xperia 10 V" },
-  { id: 21, name: "Motorola Razr 2023" },
-]);
-
+const listProduct = ref([]);
 const filterText = ref("");
+
+onMounted(() => {
+  fetchListProduct();
+});
+async function fetchListProduct() {
+  try {
+    const response = await productService.getListProduct();
+    listProduct.value = response.data;
+  } catch (error) {
+    console.error("Error fetching product list:", error);
+  }
+}
 </script>
 
 <style scoped>
@@ -71,7 +61,7 @@ const filterText = ref("");
 .products-container {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 1rem;
+  gap: 1.5rem;
 }
 
 @media (max-width: 1200px) {
