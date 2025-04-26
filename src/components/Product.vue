@@ -2,21 +2,24 @@
   <div
     class="product-card"
     :title="`${product.brand} - ${product.model}`"
-    @click="clickProduct"
+    @click="clickGoToProductPage"
   >
     <img :src="product.imgUrl" :alt="product.model" class="product-image" />
     <div class="product-info">
       <p class="product-name">
         <strong>{{ product.brand }}</strong> - {{ product.model }}
       </p>
-      <p class="product-price">{{ formattedPrice }}</p>
+      <p class="product-price">
+        {{ drawValueOrDefault(product.price, constants.NOT_SPECIFIED) }}
+      </p>
     </div>
   </div>
 </template>
 
 <script setup>
-import { defineProps, computed } from "vue";
 import { useRouter } from "vue-router";
+import { drawValueOrDefault } from "@/assets/js/common/utils";
+import * as constants from "@/assets/js/common/constants";
 
 const props = defineProps({
   product: {
@@ -27,11 +30,7 @@ const props = defineProps({
 
 const router = useRouter();
 
-const formattedPrice = computed(() => {
-  return `$${props.product.price}`;
-});
-
-function clickProduct() {
+function clickGoToProductPage() {
   router.push({ name: "ProductPage", params: { id: props.product.id } });
 }
 </script>

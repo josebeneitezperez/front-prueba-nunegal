@@ -1,11 +1,20 @@
 <script setup>
-import MainPage from '@/components/MainPage.vue'
+import Header from "@/components/Header.vue";
 </script>
 
 <template>
-  <MainPage />
+  <div class="app-layout">
+    <Header />
+    <router-view />
+  </div>
 </template>
 
-<style>
-@import '@/assets/css/general_style.css';
+<style scoped>
+@import "@/assets/css/general_style.css";
+
+.app-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
 </style>

@@ -2,11 +2,11 @@
   <header class="app-header">
     <div class="header-content">
       <h1 class="app-title">
-        <a href="#" @click.prevent="clicLogo">Título borrame</a>
+        <a href="#" @click.prevent="clickGoToHomePage">Título borrame</a>
       </h1>
       <button
         class="cart-button"
-        @click="goToCart"
+        @click="clickGoToCart"
         aria-label="Carrito de la compra"
       >
         <i class="fas fa-shopping-cart"></i>
@@ -27,32 +27,52 @@
   </header>
 </template>
 
-<script>
+<script setup>
+import { ref, watch } from "vue";
+import { useRouter, useRoute } from "vue-router";
 import "@fortawesome/fontawesome-free/css/all.css";
 
-export default {
-  name: "AppHeader",
-  props: {
-    breadcrumbs: {
-      type: Array,
-      required: true,
-    },
-  },
-  methods: {
-    goToCart() {
-      this.$router.push({ name: "Cart" });
-    },
-    clicLogo() {
-      console.log("Clic en el logo");
-    },
-  },
-};
+const router = useRouter();
+const route = useRoute();
+
+const breadcrumbs = ref([]);
+
+function clickGoToCart() {
+  router.push({ name: "Cart" });
+}
+
+function clickGoToProductListPage() {
+  router.push({ name: "ProductListPage" });
+}
+
+//borrame mejorar esta función
+function updateBreadcrumbs() {
+  if (route.name === "ProductListPage") {
+    breadcrumbs.value = [{ label: "Listado de productos", path: "/" }];
+  } else if (route.name === "ProductPage") {
+    breadcrumbs.value = [
+      { label: "Listado de productos", path: "/" },
+      { label: "Detalles del producto", path: route.fullPath },
+    ];
+  } else {
+    breadcrumbs.value = [
+      { label: "Listado de productos", path: "/" },
+      { label: "Página desconocida", path: route.fullPath },
+    ];
+  }
+}
+
+updateBreadcrumbs();
+
+watch(route, () => {
+  updateBreadcrumbs();
+});
 </script>
 
 <style scoped>
 .app-header {
-  background-color: #fff;
-  padding: 1rem;
+  background: #fff;
+  padding: 0.5rem 1rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
@@ -62,16 +82,11 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  flex-wrap: wrap;
-}
-
-.app-title {
-  font-size: 1.5rem;
-  font-weight: bold;
-  margin: 0;
 }
 
 .app-title a {
+  font-size: 1.5rem;
+  font-weight: bold;
   text-decoration: none;
   color: inherit;
 }
@@ -86,7 +101,7 @@ export default {
 .breadcrumbs ul {
   list-style: none;
   padding: 0;
-  margin: 1rem 0 0 0;
+  margin: 0.5rem 0 0;
   display: flex;
   gap: 0.5rem;
   flex-wrap: wrap;
@@ -106,14 +121,6 @@ export default {
     flex-direction: column;
     align-items: flex-start;
     gap: 0.5rem;
-  }
-
-  .cart-button {
-    align-self: flex-end;
-  }
-
-  .app-title {
-    font-size: 1.2rem;
   }
 }
 </style>
