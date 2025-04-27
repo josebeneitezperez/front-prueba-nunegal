@@ -1,7 +1,7 @@
 import { createApp } from "vue";
 import { createPinia } from "pinia";
+import { router } from "@/assets/js/config/router";
 import vuetify from "@/plugins/vuetify";
-import router from "@/assets/js/config/router";
 
 import App from "@/App.vue";
 import "@fortawesome/fontawesome-free/css/all.css";

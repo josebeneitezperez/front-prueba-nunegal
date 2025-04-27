@@ -207,13 +207,12 @@ onMounted(fetchProductDetail);
 .product-price {
   font-size: 1.8rem;
   font-weight: bold;
-  margin-bottom: 0.5rem;
+  margin-bottom: 1rem;
 }
 
 .specifications-title {
   font-size: 1.4rem;
   font-weight: bold;
-  margin: 0.5rem 0;
 }
 
 .product-specs {
@@ -269,7 +268,6 @@ onMounted(fetchProductDetail);
   padding: 0.8rem;
   background: #2c3e50;
   color: #fff;
-  border: none;
   border-radius: 6px;
   cursor: pointer;
   font-size: 1.1rem;

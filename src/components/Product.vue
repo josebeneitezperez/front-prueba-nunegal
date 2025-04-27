@@ -10,7 +10,9 @@
         <strong>{{ product.brand }}</strong> - {{ product.model }}
       </p>
       <p class="product-price">
-        {{ drawValueOrDefault(product.price, constants.NOT_SPECIFIED) }}
+        {{
+          drawValueOrDefault(product.price, constants.PRICE_NOT_SPECIFIED, "€")
+        }}
       </p>
     </div>
   </div>
@@ -66,7 +68,6 @@ function clickGoToProductPage() {
 
 .product-name {
   font-size: 1rem;
-  margin: 0;
 }
 
 .product-price {
