@@ -1,16 +1,24 @@
 <template>
   <header class="app-header">
-    <div class="header-content">
-      <h1 class="app-title">
-        <a href="#" @click.prevent="clickGoToHomePage">Título borrame</a>
-      </h1>
-      <button
-        class="cart-button"
-        @click="clickGoToCart"
-        aria-label="Carrito de la compra"
-      >
-        <i class="fas fa-shopping-cart"></i>
-      </button>
+    <div class="header-top">
+      <div class="header-left">
+        <a href="#" @click.prevent="clickGoToHomePage" class="logo-link">
+          <img
+            src="/src/assets/img/logo-with-name.png"
+            alt="Logo"
+            class="logo-image"
+          />
+        </a>
+      </div>
+      <div class="header-right">
+        <button
+          class="cart-button"
+          @click="clickGoToCart"
+          aria-label="Carrito de la compra"
+        >
+          <i class="fas fa-shopping-cart"></i>
+        </button>
+      </div>
     </div>
     <nav class="breadcrumbs">
       <ul>
@@ -41,32 +49,28 @@ function clickGoToCart() {
   router.push({ name: "Cart" });
 }
 
-function clickGoToProductListPage() {
+function clickGoToHomePage() {
   router.push({ name: "ProductListPage" });
 }
 
-//borrame mejorar esta función
 function updateBreadcrumbs() {
   if (route.name === "ProductListPage") {
-    breadcrumbs.value = [{ label: "Listado de productos", path: "/" }];
+    breadcrumbs.value = [{ label: "Home", path: "/" }];
   } else if (route.name === "ProductPage") {
     breadcrumbs.value = [
-      { label: "Listado de productos", path: "/" },
+      { label: "Home", path: "/" },
       { label: "Detalles del producto", path: route.fullPath },
     ];
   } else {
     breadcrumbs.value = [
-      { label: "Listado de productos", path: "/" },
+      { label: "Home", path: "/" },
       { label: "Página desconocida", path: route.fullPath },
     ];
   }
 }
 
 updateBreadcrumbs();
-
-watch(route, () => {
-  updateBreadcrumbs();
-});
+watch(route, updateBreadcrumbs);
 </script>
 
 <style scoped>
@@ -76,51 +80,94 @@ watch(route, () => {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
+  gap: 0.5rem;
 }
 
-.header-content {
+.header-top {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.app-title a {
-  font-size: 1.5rem;
-  font-weight: bold;
+.header-left,
+.header-right {
+  display: flex;
+  align-items: center;
+}
+
+.logo-link {
+  display: flex;
+  align-items: center;
   text-decoration: none;
-  color: inherit;
+}
+
+.logo-image {
+  height: 40px;
+  max-width: 180px;
+  object-fit: contain;
 }
 
 .cart-button {
   background: none;
   border: none;
-  cursor: pointer;
   font-size: 1.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .breadcrumbs ul {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
   list-style: none;
   padding: 0;
-  margin: 0.5rem 0 0;
-  display: flex;
+  margin: 0;
+  font-size: 0.9rem;
+  color: #666;
   gap: 0.5rem;
-  flex-wrap: wrap;
+}
+
+.breadcrumbs li {
+  display: flex;
+  align-items: center;
 }
 
 .breadcrumbs li::after {
   content: "/";
-  margin-left: 0.5rem;
+  margin: 0 0.5rem;
+  color: #ccc;
 }
 
 .breadcrumbs li:last-child::after {
   content: "";
 }
 
+.breadcrumbs a {
+  color: #007bff;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.breadcrumbs a:hover {
+  color: #0056b3;
+}
+
 @media (max-width: 768px) {
-  .header-content {
+  .header-top {
     flex-direction: column;
     align-items: flex-start;
     gap: 0.5rem;
+  }
+
+  .logo-image {
+    height: 30px;
+    max-width: 140px;
+  }
+
+  .header-right {
+    align-self: flex-end;
   }
 }
 </style>
