@@ -3,7 +3,6 @@ import * as constants from "@/assets/js/common/constants";
 
 const httpClient = axios.create({
   baseURL: constants.API_BASE_URL,
-  timeout: 10000,
   headers: {
     [constants.CONTENT_TYPE]: constants.CONTENT_TYPE_APPLICATION_JSON,
   },

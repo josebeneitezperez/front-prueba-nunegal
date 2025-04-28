@@ -9,7 +9,7 @@ const routes = [
     path: "/",
     name: "ProductListPage",
     component: ProductListPage,
-    meta: { breadcrumbText: "List products" },
+    meta: { breadcrumbText: "Home" },
   },
   {
     path: "/product/:id",

@@ -20,7 +20,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, watch } from "vue";
 import Product from "@/components/Product.vue";
 import * as productService from "@/services/productService";
 import { useProductStore } from "@/stores/productStore";
@@ -33,9 +33,16 @@ onMounted(fetchListProduct);
 
 async function fetchListProduct() {
   try {
-    const response = await productService.getListProduct();
-    productStore.setListProduct(response.data);
-    listProductFiltered.value = response.data;
+    let cachedListProduct = productStore.getCachedListProduct();
+
+    //Comprobamos si ya hemos consultado el listado anteriormente, si no es así o ha expirado, lo solicitamos a la API
+    if (cachedListProduct.length === 0) {
+      const response = await productService.getListProduct();
+      productStore.setListProduct(response.data);
+      productStore.setCachedListProduct(response.data);
+    } else {
+      productStore.setListProduct(cachedListProduct.response);
+    }
   } catch (error) {
     console.error(
       "Ocurrió un error tratando de obtener el listado de productos:",
@@ -54,6 +61,15 @@ function filterListProduct() {
         product.model.toUpperCase().includes(search)
     );
 }
+
+//Si se cambia el listado de productos, filtramos en base al input de filtro
+watch(
+  () => productStore.getListProduct(),
+  () => {
+    filterListProduct();
+  },
+  { deep: true }
+);
 </script>
 
 <style scoped>

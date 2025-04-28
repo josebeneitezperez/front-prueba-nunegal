@@ -1,18 +1,32 @@
 <template>
-  <div v-if="product" class="product-detail-page">
+  <div v-if="productStore.getProduct()" class="product-detail-page">
     <div class="product-content">
-      <img :src="product.imgUrl" :alt="product.model" class="product-image" />
+      <img
+        :src="productStore.getProduct().imgUrl"
+        :alt="productStore.getProduct().model"
+        class="product-image"
+      />
       <div class="product-data">
         <h1 class="product-title">
-          {{ drawValueOrDefault(product.model, constants.NOT_SPECIFIED) }}
+          {{
+            drawValueOrDefault(
+              productStore.getProduct().model,
+              constants.NOT_SPECIFIED
+            )
+          }}
         </h1>
         <p class="product-brand">
-          {{ drawValueOrDefault(product.brand, constants.NOT_SPECIFIED) }}
+          {{
+            drawValueOrDefault(
+              productStore.getProduct().brand,
+              constants.NOT_SPECIFIED
+            )
+          }}
         </p>
         <p class="product-price">
           {{
             drawValueOrDefault(
-              product.price,
+              productStore.getProduct().price,
               constants.PRICE_NOT_SPECIFIED,
               "€"
             )
@@ -25,19 +39,34 @@
             <tr>
               <td>CPU:</td>
               <td>
-                {{ drawValueOrDefault(product.cpu, constants.NOT_SPECIFIED) }}
+                {{
+                  drawValueOrDefault(
+                    productStore.getProduct().cpu,
+                    constants.NOT_SPECIFIED
+                  )
+                }}
               </td>
             </tr>
             <tr>
               <td>RAM:</td>
               <td>
-                {{ drawValueOrDefault(product.ram, constants.NOT_SPECIFIED) }}
+                {{
+                  drawValueOrDefault(
+                    productStore.getProduct().ram,
+                    constants.NOT_SPECIFIED
+                  )
+                }}
               </td>
             </tr>
             <tr>
               <td>Operating System:</td>
               <td>
-                {{ drawValueOrDefault(product.os, constants.NOT_SPECIFIED) }}
+                {{
+                  drawValueOrDefault(
+                    productStore.getProduct().os,
+                    constants.NOT_SPECIFIED
+                  )
+                }}
               </td>
             </tr>
             <tr>
@@ -45,7 +74,7 @@
               <td>
                 {{
                   drawValueOrDefault(
-                    product.displaySize,
+                    productStore.getProduct().displaySize,
                     constants.NOT_SPECIFIED
                   )
                 }}
@@ -55,7 +84,10 @@
               <td>Battery:</td>
               <td>
                 {{
-                  drawValueOrDefault(product.battery, constants.NOT_SPECIFIED)
+                  drawValueOrDefault(
+                    productStore.getProduct().battery,
+                    constants.NOT_SPECIFIED
+                  )
                 }}
               </td>
             </tr>
@@ -64,7 +96,7 @@
               <td>
                 {{
                   drawValueOrDefault(
-                    product.primaryCamera,
+                    productStore.getProduct().primaryCamera,
                     constants.NOT_SPECIFIED
                   )
                 }}
@@ -75,7 +107,7 @@
               <td>
                 {{
                   drawValueOrDefault(
-                    product.secondaryCmera,
+                    productStore.getProduct().secondaryCmera,
                     constants.NOT_SPECIFIED
                   )
                 }}
@@ -86,7 +118,7 @@
               <td>
                 {{
                   drawValueOrDefault(
-                    product.dimentions,
+                    productStore.getProduct().dimentions,
                     constants.NOT_SPECIFIED
                   )
                 }}
@@ -97,7 +129,7 @@
               <td>
                 {{
                   drawValueOrDefault(
-                    product.weight,
+                    productStore.getProduct().weight,
                     constants.NOT_SPECIFIED,
                     " g"
                   )
@@ -112,10 +144,13 @@
             <label>Storage:</label>
             <div class="option-buttons">
               <button
-                v-for="storage in product.options.storages"
+                v-for="storage in productStore.getProduct().options.storages"
                 :key="storage.code"
-                :class="{ active: selectedStorage === storage }"
-                @click="selectedStorage = storage"
+                :class="{
+                  active:
+                    productStore.getSelectedStorage().code === storage.code,
+                }"
+                @click="productStore.setSelectedStorage(storage)"
               >
                 {{ storage.name }}
               </button>
@@ -126,10 +161,12 @@
             <label>Colour:</label>
             <div class="option-buttons">
               <button
-                v-for="color in product.options.colors"
+                v-for="color in productStore.getProduct().options.colors"
                 :key="color.code"
-                :class="{ active: selectedColor === color }"
-                @click="selectedColor = color"
+                :class="{
+                  active: productStore.getSelectedColour().code === color.code,
+                }"
+                @click="productStore.setSelectedColour(color)"
               >
                 {{ color.name }}
               </button>
@@ -147,34 +184,37 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { onMounted } from "vue";
 import { useRoute } from "vue-router";
 import * as constants from "@/assets/js/common/constants";
 import { drawValueOrDefault } from "@/assets/js/common/utils";
 import * as productService from "@/services/productService";
 import { useCartStore } from "@/stores/cartStore";
 import { postAddProductToCart } from "@/services/productService";
+import { useProductStore } from "@/stores/productStore";
 
 const route = useRoute();
 const cartStore = useCartStore();
-
-const product = ref(null);
-const selectedStorage = ref(null);
-const selectedColor = ref(null);
+const productStore = useProductStore();
 
 onMounted(fetchProductDetail);
 
 async function fetchProductDetail() {
   try {
-    const response = await productService.getProductDetail(route.params.id);
-    product.value = response.data;
+    let cachedProductDetail =
+      productStore.getMapCachedProductDetail()[route.params.id];
 
-    //Selecciona por defecto el primer storage y color del listado
-    selectedStorage.value = product.value.options.storages[0];
-    selectedColor.value = product.value.options.colors[0];
+    //Comprobamos si ya hemos consultado este producto anteriormente, si no es así o ha expirado, lo solicitamos a la API
+    if (cachedProductDetail == undefined) {
+      const response = await productService.getProductDetail(route.params.id);
+      productStore.setProduct(response.data);
+      productStore.addCachedProductDetail(response.data);
+    } else {
+      productStore.setProduct(cachedProductDetail.response);
+    }
   } catch (error) {
     console.error(
-      "Ocurrió un error durante la lectura de los detalles del producto:",
+      "Ocurrió un error durante la obtención de los detalles del producto:",
       error
     );
   }
@@ -183,9 +223,9 @@ async function fetchProductDetail() {
 async function clickAddProductToCart() {
   try {
     const body = {
-      id: product.value.id,
-      colorCode: selectedColor.value.code,
-      storageCode: selectedStorage.value.code,
+      id: productStore.getProduct().id,
+      colorCode: productStore.getSelectedColour().code,
+      storageCode: productStore.getSelectedStorage().code,
     };
 
     const response = await postAddProductToCart(body);
