@@ -41,8 +41,9 @@ async function fetchListProduct() {
       productStore.setListProduct(response.data);
       productStore.setCachedListProduct(response.data);
     } else {
-      productStore.setListProduct(cachedListProduct.response);
+      productStore.setListProduct(cachedListProduct);
     }
+    filterListProduct();
   } catch (error) {
     console.error(
       "Ocurrió un error tratando de obtener el listado de productos:",
@@ -61,15 +62,6 @@ function filterListProduct() {
         product.model.toUpperCase().includes(search)
     );
 }
-
-//Si se cambia el listado de productos, filtramos en base al input de filtro
-watch(
-  () => productStore.getListProduct(),
-  () => {
-    filterListProduct();
-  },
-  { deep: true }
-);
 </script>
 
 <style scoped>

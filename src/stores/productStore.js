@@ -53,12 +53,10 @@ export const useProductStore = defineStore("productStore", () => {
   }
 
   function setCachedListProduct(listProduct) {
-    console.log("borrame 1");
     cachedListProduct.value = listProduct;
   }
 
   function getCachedListProduct() {
-    console.log("borrame 2");
     return cachedListProduct.value;
   }
 

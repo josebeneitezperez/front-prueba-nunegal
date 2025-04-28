@@ -10,5 +10,4 @@ export const PRICE_NOT_SPECIFIED = "Price not specified";
  * Pasado ese tiempo, se repetirá dicha llamada.
  * Representa 60 minutos en milisegundos
  */
-//const MILISECONDS_CACHED = 60 * 60 * 1000; //borrame descomentar
-export const MILISECONDS_CACHED = 10 * 1 * 1000; // 10s
+export const MILISECONDS_CACHED = 60 * 60 * 1000;

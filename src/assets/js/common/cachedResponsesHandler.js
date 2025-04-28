@@ -1,6 +1,6 @@
 import { watch } from "vue";
 import { useProductStore } from "@/stores/productStore";
-import { getListProduct, getProductDetail } from "@/services/productService";
+import * as productService from "@/services/productService";
 import { MILISECONDS_CACHED } from "@/assets/js/common/constants";
 
 export function initCachedResponsesHandler() {
@@ -10,7 +10,7 @@ export function initCachedResponsesHandler() {
    * Si se añade un nuevo detalle de producto al map, iniciamos su timeout
    */
   watch(
-    productStore.getMapCachedProductDetail(),
+    () => productStore.getMapCachedProductDetail(),
     () => {
       refreshProductDetailCache();
     },
@@ -21,9 +21,8 @@ export function initCachedResponsesHandler() {
    * Si se añade un nuevo listado de productos al array, iniciamos su timeout
    */
   watch(
-    productStore.getCachedListProduct(),
+    () => productStore.getCachedListProduct(),
     () => {
-      console.log("borrame. CREADO timeout");
       refreshListProductCache();
     },
     { deep: true }
@@ -40,8 +39,8 @@ export function initCachedResponsesHandler() {
         productData.isTimeoutCreated = true;
         setTimeout(async () => {
           try {
-            const newProductDetail = await getProductDetail(productId);
-            productData.response = newProductDetail;
+            const response = await productService.getProductDetail(productId);
+            productData.response = response.data;
             productData.isTimeoutCreated = false;
           } catch (error) {
             console.error(
@@ -59,10 +58,9 @@ export function initCachedResponsesHandler() {
    */
   function refreshListProductCache() {
     setTimeout(async () => {
-      console.log("borrame. TERMINADO timeout");
       try {
-        const newListProduct = await getListProduct();
-        productStore.setCachedListProduct(newListProduct);
+        const response = await productService.getListProduct();
+        productStore.setCachedListProduct(response.data);
       } catch (error) {
         console.error(
           "No fue posible refrescar el listado de productos. La próxima vez que se requiera, deberá ser consultado a la API."

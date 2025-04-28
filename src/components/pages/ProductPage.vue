@@ -190,7 +190,6 @@ import * as constants from "@/assets/js/common/constants";
 import { drawValueOrDefault } from "@/assets/js/common/utils";
 import * as productService from "@/services/productService";
 import { useCartStore } from "@/stores/cartStore";
-import { postAddProductToCart } from "@/services/productService";
 import { useProductStore } from "@/stores/productStore";
 
 const route = useRoute();
@@ -228,7 +227,7 @@ async function clickAddProductToCart() {
       storageCode: productStore.getSelectedStorage().code,
     };
 
-    const response = await postAddProductToCart(body);
+    const response = await productService.postAddProductToCart(body);
     cartStore.addToCartCount(response.data.count);
   } catch (error) {
     console.error(
