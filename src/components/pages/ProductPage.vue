@@ -62,7 +62,23 @@
             <tr>
               <td>Camera:</td>
               <td>
-                {{ drawValueOrDefault(primaryCamera, constants.NOT_SPECIFIED) }}
+                {{
+                  drawValueOrDefault(
+                    product.primaryCamera,
+                    constants.NOT_SPECIFIED
+                  )
+                }}
+              </td>
+            </tr>
+            <tr>
+              <td>Secondary Camera:</td>
+              <td>
+                {{
+                  drawValueOrDefault(
+                    product.secondaryCmera,
+                    constants.NOT_SPECIFIED
+                  )
+                }}
               </td>
             </tr>
             <tr>
@@ -96,12 +112,12 @@
             <label>Almacenamiento:</label>
             <div class="option-buttons">
               <button
-                v-for="option in storageOptions"
-                :key="option.code"
-                :class="{ active: selectedStorage === option.name }"
-                @click="selectedStorage = option.name"
+                v-for="storage in product.options.storages"
+                :key="storage.code"
+                :class="{ active: selectedStorage === storage }"
+                @click="selectedStorage = storage"
               >
-                {{ option.name }}
+                {{ storage.name }}
               </button>
             </div>
           </div>
@@ -110,17 +126,19 @@
             <label>Color:</label>
             <div class="option-buttons">
               <button
-                v-for="option in colorOptions"
-                :key="option.code"
-                :class="{ active: selectedColor === option.name }"
-                @click="selectedColor = option.name"
+                v-for="color in product.options.colors"
+                :key="color.code"
+                :class="{ active: selectedColor === color }"
+                @click="selectedColor = color"
               >
-                {{ option.name }}
+                {{ color.name }}
               </button>
             </div>
           </div>
 
-          <button class="add-to-cart">Añadir a la cesta</button>
+          <button class="add-to-cart" @click="clickAddProductToCart">
+            Añadir a la cesta
+          </button>
         </div>
       </div>
     </div>
@@ -134,38 +152,51 @@ import { useRoute } from "vue-router";
 import * as constants from "@/assets/js/common/constants";
 import { drawValueOrDefault } from "@/assets/js/common/utils";
 import * as productService from "@/services/productService";
+import { useCartStore } from "@/stores/cartStore";
+import { postAddProductToCart } from "@/services/productService";
 
 const route = useRoute();
-const product = ref(null);
-const primaryCamera = ref("");
+const cartStore = useCartStore();
 
-const storageOptions = ref([]);
-const colorOptions = ref([]);
-const selectedStorage = ref("");
-const selectedColor = ref("");
+const product = ref(null);
+const selectedStorage = ref(null);
+const selectedColor = ref(null);
+
+onMounted(fetchProductDetail);
 
 async function fetchProductDetail() {
   try {
-    const id = route.params.id;
-    const response = await productService.getProductDetail(id);
+    const response = await productService.getProductDetail(route.params.id);
     product.value = response.data;
 
-    primaryCamera.value =
-      product.value.primaryCamera?.join(", ") || "Not specified";
-    storageOptions.value = product.value.options?.storages || [];
-    colorOptions.value = product.value.options?.colors || [];
-    selectedStorage.value = storageOptions.value.length
-      ? storageOptions.value[0].name
-      : "";
-    selectedColor.value = colorOptions.value.length
-      ? colorOptions.value[0].name
-      : "";
+    //Selecciona por defecto el primer storage y color del listado
+    selectedStorage.value = product.value.options.storages[0];
+    selectedColor.value = product.value.options.colors[0];
   } catch (error) {
-    console.error("Error fetching product detail:", error);
+    console.error(
+      "Ocurrió un error durante la lectura de los detalles del producto:",
+      error
+    );
   }
 }
 
-onMounted(fetchProductDetail);
+async function clickAddProductToCart() {
+  try {
+    const body = {
+      id: product.value.id,
+      colorCode: selectedColor.value.code,
+      storageCode: selectedStorage.value.code,
+    };
+
+    const response = await postAddProductToCart(body);
+    cartStore.addToCartCount(response.data.count);
+  } catch (error) {
+    console.error(
+      "Ocurrió un error tratando de añadir el producto al carrito:",
+      error
+    );
+  }
+}
 </script>
 
 <style scoped>

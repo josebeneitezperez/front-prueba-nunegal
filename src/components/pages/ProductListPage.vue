@@ -30,12 +30,16 @@ const filterText = ref("");
 onMounted(() => {
   fetchListProduct();
 });
+
 async function fetchListProduct() {
   try {
     const response = await productService.getListProduct();
     listProduct.value = response.data;
   } catch (error) {
-    console.error("Error fetching product list:", error);
+    console.error(
+      "Ocurrió un error tratando de obtener el listado de productos:",
+      error
+    );
   }
 }
 </script>

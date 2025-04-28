@@ -7,11 +7,7 @@
         class="logo-image"
       />
     </a>
-    <button
-      class="cart-button"
-      @click="clickGoToCart"
-      :title="`Tiene ${cartStore.getNumCartItems()} artículos en la cesta`"
-    >
+    <button class="cart-button" @click="clickGoToCart" :title="getCartTitle()">
       <i class="fas fa-shopping-cart"></i>
       <span class="cart-count">{{ cartStore.getNumCartItems() }}</span>
     </button>
@@ -36,6 +32,8 @@ import { breadcrumbHistory } from "@/assets/js/config/router";
 
 const cartStore = useCartStore();
 const router = useRouter();
+const getCartTitle = () =>
+  `Tiene ${cartStore.getNumCartItems()} ${cartStore.getNumCartItems() === 1 ? "producto" : "productos"} en la cesta`;
 
 function clickGoToCart() {
   router.push({ name: "Cart" });

@@ -8,6 +8,6 @@ export function getProductDetail(productId) {
   return apiService.get(`/api/product/${productId}`);
 }
 
-export function postProductToCart(cartData) {
+export function postAddProductToCart(cartData) {
   return apiService.post("/api/cart", cartData);
 }

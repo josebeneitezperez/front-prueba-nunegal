@@ -9,5 +9,9 @@ export const useCartStore = defineStore("cart", () => {
     return numCartItems.value;
   }
 
-  return { getNumCartItems };
+  function addToCartCount(newCount) {
+    _numCartItems.value = newCount;
+  }
+
+  return { getNumCartItems, addToCartCount };
 });
