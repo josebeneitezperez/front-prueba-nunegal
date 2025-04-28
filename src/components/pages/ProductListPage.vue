@@ -5,13 +5,13 @@
         type="text"
         v-model="filterText"
         placeholder="Filter products"
-        title="borrame filtro"
         class="filter-input"
+        @keyup="filterListProduct"
       />
     </div>
     <div class="products-container">
       <Product
-        v-for="product in listProduct"
+        v-for="product in listProductFiltered"
         :key="product.id"
         :product="product"
       />
@@ -24,23 +24,32 @@ import { ref, onMounted } from "vue";
 import Product from "@/components/Product.vue";
 import * as productService from "@/services/productService";
 
-const listProduct = ref([]);
+const listAllProduct = ref([]);
+const listProductFiltered = ref([]);
 const filterText = ref("");
 
-onMounted(() => {
-  fetchListProduct();
-});
+onMounted(fetchListProduct);
 
 async function fetchListProduct() {
   try {
     const response = await productService.getListProduct();
-    listProduct.value = response.data;
+    listAllProduct.value = response.data;
+    listProductFiltered.value = response.data;
   } catch (error) {
     console.error(
       "Ocurrió un error tratando de obtener el listado de productos:",
       error
     );
   }
+}
+
+function filterListProduct() {
+  const search = filterText.value.toUpperCase();
+  listProductFiltered.value = listAllProduct.value.filter(
+    (product) =>
+      product.brand.toUpperCase().includes(search) ||
+      product.model.toUpperCase().includes(search)
+  );
 }
 </script>
 
