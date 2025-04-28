@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { ref, readonly } from "vue";
 
-export const useCartStore = defineStore("cart", () => {
+export const useCartStore = defineStore("cartStore", () => {
   const _numCartItems = ref(0);
   const numCartItems = readonly(_numCartItems);
 

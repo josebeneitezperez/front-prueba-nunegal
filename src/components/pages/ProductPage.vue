@@ -19,7 +19,7 @@
           }}
         </p>
 
-        <h2 class="specifications-title">Especificaciones:</h2>
+        <h2 class="specifications-title">Specifications:</h2>
         <table class="product-specs">
           <tbody>
             <tr>
@@ -109,7 +109,7 @@
 
         <div class="product-options">
           <div class="option-section">
-            <label>Almacenamiento:</label>
+            <label>Storage:</label>
             <div class="option-buttons">
               <button
                 v-for="storage in product.options.storages"
@@ -123,7 +123,7 @@
           </div>
 
           <div class="option-section">
-            <label>Color:</label>
+            <label>Colour:</label>
             <div class="option-buttons">
               <button
                 v-for="color in product.options.colors"
@@ -137,7 +137,7 @@
           </div>
 
           <button class="add-to-cart" @click="clickAddProductToCart">
-            Añadir a la cesta
+            Add to cart
           </button>
         </div>
       </div>
@@ -209,7 +209,7 @@ async function clickAddProductToCart() {
 .product-content {
   display: flex;
   gap: 2rem;
-  max-width: 1000px;
+  max-width: 1035px;
   flex-wrap: wrap;
 }
 

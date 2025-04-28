@@ -23,8 +23,9 @@
 import { ref, onMounted } from "vue";
 import Product from "@/components/Product.vue";
 import * as productService from "@/services/productService";
+import { useProductStore } from "@/stores/productStore";
 
-const listAllProduct = ref([]);
+const productStore = useProductStore();
 const listProductFiltered = ref([]);
 const filterText = ref("");
 
@@ -33,7 +34,7 @@ onMounted(fetchListProduct);
 async function fetchListProduct() {
   try {
     const response = await productService.getListProduct();
-    listAllProduct.value = response.data;
+    productStore.setListProduct(response.data);
     listProductFiltered.value = response.data;
   } catch (error) {
     console.error(
@@ -45,11 +46,13 @@ async function fetchListProduct() {
 
 function filterListProduct() {
   const search = filterText.value.toUpperCase();
-  listProductFiltered.value = listAllProduct.value.filter(
-    (product) =>
-      product.brand.toUpperCase().includes(search) ||
-      product.model.toUpperCase().includes(search)
-  );
+  listProductFiltered.value = productStore
+    .getListProduct()
+    .filter(
+      (product) =>
+        product.brand.toUpperCase().includes(search) ||
+        product.model.toUpperCase().includes(search)
+    );
 }
 </script>
 

@@ -33,7 +33,7 @@ import { breadcrumbHistory } from "@/assets/js/config/router";
 const cartStore = useCartStore();
 const router = useRouter();
 const getCartTitle = () =>
-  `Tiene ${cartStore.getNumCartItems()} ${cartStore.getNumCartItems() === 1 ? "producto" : "productos"} en la cesta`;
+  `Your cart contains ${cartStore.getNumCartItems()} ${cartStore.getNumCartItems() === 1 ? "product" : "products"}`;
 
 function clickGoToCart() {
   router.push({ name: "Cart" });

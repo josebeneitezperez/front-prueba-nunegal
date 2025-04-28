@@ -9,13 +9,13 @@ const routes = [
     path: "/",
     name: "ProductListPage",
     component: ProductListPage,
-    meta: { breadcrumbText: "Listado de productos" },
+    meta: { breadcrumbText: "List products" },
   },
   {
     path: "/product/:id",
     name: "ProductPage",
     component: ProductPage,
-    meta: { breadcrumbText: "Detalle del producto" },
+    meta: { breadcrumbText: "Product detail" },
   },
 ];
 
