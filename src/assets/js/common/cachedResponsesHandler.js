@@ -14,7 +14,7 @@ export function initCachedResponsesHandler() {
     () => {
       refreshProductDetailCache();
     },
-    { deep: true }
+    { deep: true },
   );
 
   /**
@@ -25,7 +25,7 @@ export function initCachedResponsesHandler() {
     () => {
       refreshListProductCache();
     },
-    { deep: true }
+    { deep: true },
   );
 
   /**
@@ -44,7 +44,7 @@ export function initCachedResponsesHandler() {
             productData.isTimeoutCreated = false;
           } catch (error) {
             console.error(
-              `No fue posible refrescar el detalle del producto con id ${productId}. La próxima vez que se requiera, deberá ser consultado a la API.`
+              `No fue posible refrescar el detalle del producto con id ${productId}. La próxima vez que se requiera, deberá ser consultado a la API.`,
             );
             delete mapCached[productId];
           }
@@ -63,7 +63,7 @@ export function initCachedResponsesHandler() {
         productStore.setCachedListProduct(response.data);
       } catch (error) {
         console.error(
-          "No fue posible refrescar el listado de productos. La próxima vez que se requiera, deberá ser consultado a la API."
+          "No fue posible refrescar el listado de productos. La próxima vez que se requiera, deberá ser consultado a la API.",
         );
         productStore.setCachedListProduct([]);
       }

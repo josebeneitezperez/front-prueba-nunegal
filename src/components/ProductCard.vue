@@ -10,30 +10,28 @@
         <strong>{{ product.brand }}</strong> - {{ product.model }}
       </p>
       <p class="product-price">
-        {{
-          drawValueOrDefault(product.price, constants.PRICE_NOT_SPECIFIED, "$")
-        }}
+        {{ drawValueOrDefault(product.price, constants.PRICE_NOT_SPECIFIED, '$') }}
       </p>
     </div>
   </div>
 </template>
 
 <script setup>
-import { useRouter } from "vue-router";
-import { drawValueOrDefault } from "@/assets/js/common/utils";
-import * as constants from "@/assets/js/common/constants";
+import { useRouter } from 'vue-router'
+import { drawValueOrDefault } from '@/assets/js/common/utils'
+import * as constants from '@/assets/js/common/constants'
 
 const props = defineProps({
   product: {
     type: Object,
     required: true,
   },
-});
+})
 
-const router = useRouter();
+const router = useRouter()
 
 function clickGoToProductPage() {
-  router.push({ name: "ProductPage", params: { id: props.product.id } });
+  router.push({ name: 'ProductPage', params: { id: props.product.id } })
 }
 </script>
 

@@ -10,57 +10,49 @@
       />
     </div>
     <div class="products-container">
-      <Product
-        v-for="product in listProductFiltered"
-        :key="product.id"
-        :product="product"
-      />
+      <ProductCard v-for="product in listProductFiltered" :key="product.id" :product="product" />
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from "vue";
-import Product from "@/components/Product.vue";
-import * as productService from "@/services/productService";
-import { useProductStore } from "@/stores/productStore";
+import { ref, onMounted, watch } from 'vue'
+import ProductCard from '@/components/ProductCard.vue'
+import * as productService from '@/services/productService'
+import { useProductStore } from '@/stores/productStore'
 
-const productStore = useProductStore();
-const listProductFiltered = ref([]);
-const filterText = ref("");
+const productStore = useProductStore()
+const listProductFiltered = ref([])
+const filterText = ref('')
 
-onMounted(fetchListProduct);
+onMounted(fetchListProduct)
 
 async function fetchListProduct() {
   try {
-    let cachedListProduct = productStore.getCachedListProduct();
+    let cachedListProduct = productStore.getCachedListProduct()
 
     //Comprobamos si ya hemos consultado el listado anteriormente, si no es así o ha expirado, lo solicitamos a la API
     if (cachedListProduct.length === 0) {
-      const response = await productService.getListProduct();
-      productStore.setListProduct(response.data);
-      productStore.setCachedListProduct(response.data);
+      const response = await productService.getListProduct()
+      productStore.setListProduct(response.data)
+      productStore.setCachedListProduct(response.data)
     } else {
-      productStore.setListProduct(cachedListProduct);
+      productStore.setListProduct(cachedListProduct)
     }
-    filterListProduct();
+    filterListProduct()
   } catch (error) {
-    console.error(
-      "Ocurrió un error tratando de obtener el listado de productos:",
-      error
-    );
+    console.error('Ocurrió un error tratando de obtener el listado de productos:', error)
   }
 }
 
 function filterListProduct() {
-  const search = filterText.value.toUpperCase();
+  const search = filterText.value.toUpperCase()
   listProductFiltered.value = productStore
     .getListProduct()
     .filter(
       (product) =>
-        product.brand.toUpperCase().includes(search) ||
-        product.model.toUpperCase().includes(search)
-    );
+        product.brand.toUpperCase().includes(search) || product.model.toUpperCase().includes(search)
+    )
 }
 </script>
 

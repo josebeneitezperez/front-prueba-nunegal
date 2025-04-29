@@ -8,7 +8,7 @@ if (fs.existsSync(envPath)) {
   config({ path: envPath });
 } else {
   console.warn(
-    "Se esperaba el fichero .env.development. pero no se ha encontrado"
+    "Se esperaba el fichero .env.development. pero no se ha encontrado",
   );
 }
 

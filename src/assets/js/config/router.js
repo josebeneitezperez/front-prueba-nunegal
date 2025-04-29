@@ -28,7 +28,7 @@ router.beforeEach((to, from, next) => {
   addFirstPageToBreadcrumbIfNotExist();
 
   const existingIndex = breadcrumbHistory.value.findIndex(
-    (crumb) => crumb.path === to.fullPath
+    (crumb) => crumb.path === to.fullPath,
   );
 
   //Si el historico ya contiene la ruta a la que nos dirigimos, eliminamos de este las páginas posteriores

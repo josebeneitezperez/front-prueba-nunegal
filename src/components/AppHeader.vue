@@ -1,11 +1,7 @@
 <template>
   <header class="app-header">
     <a href="#" @click.prevent="clickGoToHomePage">
-      <img
-        src="/src/assets/img/logo-with-name.png"
-        alt="Logo"
-        class="logo-image"
-      />
+      <img src="/src/assets/img/logo-with-name.png" alt="Logo" class="logo-image" />
     </a>
     <button class="cart-button" @click="clickGoToCart" :title="getCartTitle()">
       <i class="fas fa-shopping-cart"></i>
@@ -25,25 +21,25 @@
 </template>
 
 <script setup>
-import { computed } from "vue";
-import { useRouter } from "vue-router";
-import { useCartStore } from "@/stores/cartStore";
-import { breadcrumbHistory } from "@/assets/js/config/router";
+import { computed } from 'vue'
+import { useRouter } from 'vue-router'
+import { useCartStore } from '@/stores/cartStore'
+import { breadcrumbHistory } from '@/assets/js/config/router'
 
-const cartStore = useCartStore();
-const router = useRouter();
+const cartStore = useCartStore()
+const router = useRouter()
 const getCartTitle = () =>
-  `Your cart contains ${cartStore.getNumCartItems()} ${cartStore.getNumCartItems() === 1 ? "product" : "products"}`;
+  `Your cart contains ${cartStore.getNumCartItems()} ${cartStore.getNumCartItems() === 1 ? 'product' : 'products'}`
 
 function clickGoToCart() {
-  router.push({ name: "Cart" });
+  router.push({ name: 'Cart' })
 }
 
 function clickGoToHomePage() {
-  router.push({ name: "ProductListPage" });
+  router.push({ name: 'ProductListPage' })
 }
 
-const breadcrumbs = computed(() => breadcrumbHistory.value);
+const breadcrumbs = computed(() => breadcrumbHistory.value)
 </script>
 
 <style scoped>
@@ -88,13 +84,50 @@ const breadcrumbs = computed(() => breadcrumbHistory.value);
 }
 
 .breadcrumbs li::after {
-  content: "/";
+  content: '/';
   margin: 0.5rem;
   color: #ccc;
 }
 
 .breadcrumbs li:last-child::after {
-  content: "";
+  content: '';
+  margin: 0.5rem;
+  color: #ccc;
+}
+
+.breadcrumbs li:last-child::after {
+  content: '';
+  margin: 0.5rem;
+  color: #ccc;
+}
+
+.breadcrumbs li:last-child::after {
+  content: '';
+  margin: 0.5rem;
+  color: #ccc;
+}
+
+.breadcrumbs li:last-child::after {
+  content: '';
+  margin: 0.5rem;
+  color: #ccc;
+}
+
+.breadcrumbs li:last-child::after {
+  content: '';
+  margin: 0.5rem;
+  color: #ccc;
+}
+
+.breadcrumbs li:last-child::after {
+  content: '';
+
+  margin: 0.5rem;
+  color: #ccc;
+}
+
+.breadcrumbs li:last-child::after {
+  content: '';
 }
 
 .breadcrumbs a {

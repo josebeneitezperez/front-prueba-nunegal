@@ -8,28 +8,14 @@
       />
       <div class="product-data">
         <h1 class="product-title">
-          {{
-            drawValueOrDefault(
-              productStore.getProduct().model,
-              constants.NOT_SPECIFIED
-            )
-          }}
+          {{ drawValueOrDefault(productStore.getProduct().model, constants.NOT_SPECIFIED) }}
         </h1>
         <p class="product-brand">
-          {{
-            drawValueOrDefault(
-              productStore.getProduct().brand,
-              constants.NOT_SPECIFIED
-            )
-          }}
+          {{ drawValueOrDefault(productStore.getProduct().brand, constants.NOT_SPECIFIED) }}
         </p>
         <p class="product-price">
           {{
-            drawValueOrDefault(
-              productStore.getProduct().price,
-              constants.PRICE_NOT_SPECIFIED,
-              "$"
-            )
+            drawValueOrDefault(productStore.getProduct().price, constants.PRICE_NOT_SPECIFIED, '$')
           }}
         </p>
 
@@ -39,56 +25,33 @@
             <tr>
               <td>CPU:</td>
               <td>
-                {{
-                  drawValueOrDefault(
-                    productStore.getProduct().cpu,
-                    constants.NOT_SPECIFIED
-                  )
-                }}
+                {{ drawValueOrDefault(productStore.getProduct().cpu, constants.NOT_SPECIFIED) }}
               </td>
             </tr>
             <tr>
               <td>RAM:</td>
               <td>
-                {{
-                  drawValueOrDefault(
-                    productStore.getProduct().ram,
-                    constants.NOT_SPECIFIED
-                  )
-                }}
+                {{ drawValueOrDefault(productStore.getProduct().ram, constants.NOT_SPECIFIED) }}
               </td>
             </tr>
             <tr>
               <td>Operating System:</td>
               <td>
-                {{
-                  drawValueOrDefault(
-                    productStore.getProduct().os,
-                    constants.NOT_SPECIFIED
-                  )
-                }}
+                {{ drawValueOrDefault(productStore.getProduct().os, constants.NOT_SPECIFIED) }}
               </td>
             </tr>
             <tr>
               <td>Display Resolution:</td>
               <td>
                 {{
-                  drawValueOrDefault(
-                    productStore.getProduct().displaySize,
-                    constants.NOT_SPECIFIED
-                  )
+                  drawValueOrDefault(productStore.getProduct().displaySize, constants.NOT_SPECIFIED)
                 }}
               </td>
             </tr>
             <tr>
               <td>Battery:</td>
               <td>
-                {{
-                  drawValueOrDefault(
-                    productStore.getProduct().battery,
-                    constants.NOT_SPECIFIED
-                  )
-                }}
+                {{ drawValueOrDefault(productStore.getProduct().battery, constants.NOT_SPECIFIED) }}
               </td>
             </tr>
             <tr>
@@ -117,10 +80,7 @@
               <td>Dimensions:</td>
               <td>
                 {{
-                  drawValueOrDefault(
-                    productStore.getProduct().dimentions,
-                    constants.NOT_SPECIFIED
-                  )
+                  drawValueOrDefault(productStore.getProduct().dimentions, constants.NOT_SPECIFIED)
                 }}
               </td>
             </tr>
@@ -131,7 +91,7 @@
                   drawValueOrDefault(
                     productStore.getProduct().weight,
                     constants.NOT_SPECIFIED,
-                    " g"
+                    ' g'
                   )
                 }}
               </td>
@@ -147,8 +107,7 @@
                 v-for="storage in productStore.getProduct().options.storages"
                 :key="storage.code"
                 :class="{
-                  active:
-                    productStore.getSelectedStorage().code === storage.code,
+                  active: productStore.getSelectedStorage().code === storage.code,
                 }"
                 @click="productStore.setSelectedStorage(storage)"
               >
@@ -173,9 +132,7 @@
             </div>
           </div>
 
-          <button class="add-to-cart" @click="clickAddProductToCart">
-            Add to cart
-          </button>
+          <button class="add-to-cart" @click="clickAddProductToCart">Add to cart</button>
         </div>
       </div>
     </div>
@@ -184,38 +141,34 @@
 </template>
 
 <script setup>
-import { onMounted } from "vue";
-import { useRoute } from "vue-router";
-import * as constants from "@/assets/js/common/constants";
-import { drawValueOrDefault } from "@/assets/js/common/utils";
-import * as productService from "@/services/productService";
-import { useCartStore } from "@/stores/cartStore";
-import { useProductStore } from "@/stores/productStore";
+import { onMounted } from 'vue'
+import { useRoute } from 'vue-router'
+import * as constants from '@/assets/js/common/constants'
+import { drawValueOrDefault } from '@/assets/js/common/utils'
+import * as productService from '@/services/productService'
+import { useCartStore } from '@/stores/cartStore'
+import { useProductStore } from '@/stores/productStore'
 
-const route = useRoute();
-const cartStore = useCartStore();
-const productStore = useProductStore();
+const route = useRoute()
+const cartStore = useCartStore()
+const productStore = useProductStore()
 
-onMounted(fetchProductDetail);
+onMounted(fetchProductDetail)
 
 async function fetchProductDetail() {
   try {
-    let cachedProductDetail =
-      productStore.getMapCachedProductDetail()[route.params.id];
+    let cachedProductDetail = productStore.getMapCachedProductDetail()[route.params.id]
 
     //Comprobamos si ya hemos consultado este producto anteriormente, si no es así o ha expirado, lo solicitamos a la API
     if (cachedProductDetail == undefined) {
-      const response = await productService.getProductDetail(route.params.id);
-      productStore.setProduct(response.data);
-      productStore.addCachedProductDetail(response.data);
+      const response = await productService.getProductDetail(route.params.id)
+      productStore.setProduct(response.data)
+      productStore.addCachedProductDetail(response.data)
     } else {
-      productStore.setProduct(cachedProductDetail.response);
+      productStore.setProduct(cachedProductDetail.response)
     }
   } catch (error) {
-    console.error(
-      "Ocurrió un error durante la obtención de los detalles del producto:",
-      error
-    );
+    console.error('Ocurrió un error durante la obtención de los detalles del producto:', error)
   }
 }
 
@@ -225,15 +178,12 @@ async function clickAddProductToCart() {
       id: productStore.getProduct().id,
       colorCode: productStore.getSelectedColour().code,
       storageCode: productStore.getSelectedStorage().code,
-    };
+    }
 
-    const response = await productService.postAddProductToCart(body);
-    cartStore.addToCartCount(response.data.count);
+    const response = await productService.postAddProductToCart(body)
+    cartStore.addToCartCount(response.data.count)
   } catch (error) {
-    console.error(
-      "Ocurrió un error tratando de añadir el producto al carrito:",
-      error
-    );
+    console.error('Ocurrió un error tratando de añadir el producto al carrito:', error)
   }
 }
 </script>
