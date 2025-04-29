@@ -28,7 +28,7 @@
             drawValueOrDefault(
               productStore.getProduct().price,
               constants.PRICE_NOT_SPECIFIED,
-              "€"
+              "$"
             )
           }}
         </p>

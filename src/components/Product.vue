@@ -11,7 +11,7 @@
       </p>
       <p class="product-price">
         {{
-          drawValueOrDefault(product.price, constants.PRICE_NOT_SPECIFIED, "€")
+          drawValueOrDefault(product.price, constants.PRICE_NOT_SPECIFIED, "$")
         }}
       </p>
     </div>
