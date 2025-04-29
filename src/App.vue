@@ -10,8 +10,6 @@ import Header from "@/components/Header.vue";
 </template>
 
 <style scoped>
-@import "@/assets/css/general_style.css";
-
 .app-layout {
   display: flex;
   flex-direction: column;
